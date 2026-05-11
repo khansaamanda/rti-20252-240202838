@@ -67,34 +67,34 @@ Jika rantai ini tidak lengkap, RQ belum mature. Bi-directional: RQ yang tidak bi
 ```
 RQ-CONTRIBUTION-HYPOTHESIS
 
-Gap Statement  : ____________________
+Gap Statement  : Banyak organisasi kesulitan mengelola aset digital (perangkat lunak, data) secara optimal. Meskipun IoT menawarkan pemantauan otomatis, terdapat tantangan besar pada integrasi sistem serta masalah keamanan data (malware/ransomware) yang bisa menghambat efisiensi.
 
 Research Question:
-  Tipe         : [ ] Comparison  [ ] Improvement  [ ] Exploratory
-  Formulasi    : ____________________
-  Variabel IV  : ____________________
-  Variabel DV  : ____________________
-  Metrik       : ____________________
-  Dataset      : ____________________
-  Baseline     : ____________________
+  Tipe         : [ ] Comparison  [ ] Improvement  [x] Exploratory
+  Formulasi    : Bagaimana pengaruh teknologi IoT terhadap efisiensi manajemen aset digital secara real-time dan apa saja tantangan keamanan yang dihadapi?
+  Variabel IV  : Penerapan Teknologi IoT.
+  Variabel DV  : Efisiensi Manajemen Aset Digital (kecepatan, akurasi keputusan).
+  Metrik       : Waktu respons, biaya operasional, tingkat deteksi ancaman.
+  Dataset      : Studi literatur dari berbagai artikel jurnal dan laporan industri (seperti data Statista & Transforma Insights).
+  Baseline     : Manajemen aset digital secara tradisional/manual (konvensional).
 
 Quality Check RQ:
-  [ ] Variabel spesifik
-  [ ] Metrik jelas
-  [ ] Baseline ada
-  [ ] Konteks disebutkan
+  [x] Variabel spesifik
+  [x] Metrik jelas
+  [x] Baseline ada
+  [x] Konteks disebutkan
   [ ] Memerlukan eksperimen (bukan hanya survei literatur)
 
 Contribution Statement:
-  Apa yang baru diketahui : ____________________
-  Jenis kontribusi        : [ ] Improvement  [ ] Comparison  [ ] Novel approach
-  Gap yang diisi          : ____________________
+  Apa yang baru diketahui : IoT terbukti meningkatkan efisiensi lewat pemeliharaan prediktif, namun butuh sistem keamanan kuat karena pertumbuhan perangkat IoT yang pesat meningkatkan risiko serangan siber.
+  Jenis kontribusi        : [ ] Improvement  [x] Comparison  [ ] Novel approach
+  Gap yang diisi          : Memberikan solusi atas ketidaktahuan organisasi dalam memanfaatkan data IoT untuk manajemen aset yang aman.
 
 Hypothesis Pair:
-  H₀ : ____________________
-  H₁ : ____________________
-  Threshold              : ____________________
-  Justifikasi threshold  : ____________________
+  H₀ : Penerapan IoT tidak memberikan pengaruh signifikan terhadap efisiensi manajemen aset digital dibandingkan metode konvensional.
+  H₁ : Penerapan IoT secara signifikan meningkatkan efisiensi (kecepatan dan akurasi) manajemen aset digital secara real-time.
+  Threshold              : Peningkatan efisiensi minimal 20% (asumsi umum dalam riset manajemen) atau penurunan waktu respons ancaman.
+  Justifikasi threshold  : Data simulasi menunjukkan penurunan waktu respons yang stabil seiring penggunaan sistem pemantauan real-time.
 ```
 
 ---
@@ -103,24 +103,24 @@ Hypothesis Pair:
 
 Gunakan gap yang ditemukan di WS-03. Transformasikan menjadi Research Question.
 
-**Gap dari WS-03:** ____________________________________
+**Gap dari WS-03:** Banyak organisasi kesulitan memanfaatkan data dari perangkat IoT secara optimal untuk mengelola aset digital karena adanya tantangan besar pada integrasi sistem serta ancaman keamanan seperti malware dan ransomware.
 
 **RQ versi pertama (tulis bebas):**
-> ___________________________________________________
+> Apakah penggunaan teknologi IoT benar-benar bisa membuat pengelolaan aset digital di perusahaan jadi lebih efisien dan aman dari serangan siber?
 
 **Evaluasi RQ:**
 
 | Komponen | Ada? | Isi |
 |----------|------|-----|
-| Metode spesifik | *Contoh: Ya — CNN vs RF* | |
-| Metrik terukur | | |
-| Baseline | | |
-| Dataset/konteks | | |
+| Metode spesifik | Ya | Menggunakan teknologi IoT (sensor dan pemantauan langsung). |
+| Metrik terukur | Belum | Kata "cepat" dan "aman" masih terlalu umum, perlu indikator angka. |
+| Baseline | Ya | Dibandingkan dengan cara lama yang masih manual/pakai tenaga manusia. |
+| Dataset/konteks | Ya | Fokus pada aset digital di sebuah organisasi atau kantor. |
 
-**Tipe RQ:** [ ] Comparison / [ ] Improvement / [ ] Exploratory
+**Tipe RQ:** [x] Exploratory (Mencari tahu pengaruh dan tantangan baru).  
 
 **RQ versi revisi (setelah evaluasi):**
-> ___________________________________________________
+> Bagaimana penggunaan sensor IoT dapat mempercepat waktu deteksi kerusakan aset dan menurunkan biaya operasional kantor dibandingkan dengan cara pengecekan manual?
 
 ---
 
@@ -130,14 +130,14 @@ Rumuskan pasangan hipotesis dari RQ di Latihan 1.
 
 | Komponen | Isi |
 |----------|-----|
-| H₀ | *Contoh: Tidak ada perbedaan signifikan F1-Score antara CNN dan RF pada dataset CIC-MalMem-2022* |
-| H₁ | |
-| Metrik | |
-| Threshold | |
-| Justifikasi threshold | |
+| H₀ | Penggunaan sensor IoT tidak memberikan pengaruh pada kecepatan deteksi kerusakan aset dan biaya operasional dibandingkan cara manual. |
+| H₁ | Penggunaan sensor IoT secara nyata mempercepat deteksi kerusakan aset dan menurunkan biaya operasional kantor. |
+| Metrik | Waktu deteksi (dalam jam/menit) dan jumlah biaya perbaikan (dalam Rupiah). |
+| Threshold | Peningkatan efisiensi minimal 20%. |
+| Justifikasi threshold | Angka 20% dianggap angka standar yang cukup besar untuk membuktikan bahwa perubahan teknologi itu bermanfaat, bukan cuma kebetulan. |
 
-**Apakah hipotesis ini falsifiable?** [ ] Ya / [ ] Tidak
-> Bagaimana cara membuktikannya salah? ___________________
+**Apakah hipotesis ini falsifiable?** [x] Ya / [ ] Tidak
+> Bagaimana cara membuktikannya salah? Jika setelah data dikumpulkan, ternyata waktu deteksi tetap lama atau biaya operasional malah jadi lebih mahal (karena biaya perawatan alat IoT-nya sangat tinggi), maka pernyataan H₁ otomatis salah dan kita harus tetap memakai cara manual (H₀).
 
 ---
 
@@ -147,15 +147,15 @@ Lengkapi rantai dari RQ hingga metode analisis.
 
 | Tahap | Isi |
 |-------|-----|
-| RQ | *Contoh: Apakah CNN menghasilkan F1-Score lebih tinggi dari RF...* |
-| Variable (IV) | *Contoh: Jenis algoritma (CNN vs RF)* |
-| Variable (DV) | |
-| Metric | |
-| Data source | |
-| Analysis method | |
+| RQ | Bagaimana penggunaan sensor IoT mempercepat waktu deteksi kerusakan aset dan menurunkan biaya operasional kantor dibandingkan cara manual? |
+| Variable (IV) | Metode Pengelolaan: (Penerapan teknologi IoT vs. Cara Konvensional/Manual). |
+| Variable (DV) | Efisiensi Manajemen: (Waktu deteksi masalah dan Biaya operasional). |
+| Metric | Waktu: Menit/Jam sejak kerusakan terjadi hingga terdeteksi. Biaya: Pengeluaran rutin untuk pengecekan dan perbaikan (Rupiah). |
+| Data source | Laporan riwayat perbaikan aset, log sensor IoT, dan catatan pengeluaran operasional organisasi. |
+| Analysis method | Analisis Komparatif: Membandingkan rata-rata waktu dan biaya antara periode manual dengan periode setelah pakai IoT. |
 
-**Apakah rantai lengkap?** [ ] Ya / [ ] Tidak
-> Jika tidak, tahap mana yang perlu direvisi? ______________
+**Apakah rantai lengkap?** [x] Ya / [ ] Tidak
+> Jika tidak, tahap mana yang perlu direvisi? Rantai sudah lengkap karena setiap tahap (dari variabel sampai cara analisis) sudah saling mendukung untuk menjawab pertanyaan penelitian (RQ).
 
 ---
 
@@ -163,6 +163,6 @@ Lengkapi rantai dari RQ hingga metode analisis.
 
 > Ambil satu judul skripsi/paper yang pernah dibaca. Coba ekstrak RQ-nya. Apakah RQ tersebut memenuhi semua komponen (metode, metrik, baseline, konteks)? Jika tidak, apa yang hilang?
 
-**Judul:** _____________________________________________
-**RQ yang diekstrak:** __________________________________
-**Komponen yang hilang:** _______________________________
+**Judul:** Pengaruh Teknologi Internet of Things Terhadap Manajemen Aset Digital Secara Real-Time.
+**RQ yang diekstrak:** pakah penerapan IoT memberikan dampak signifikan dalam meningkatkan efisiensi manajemen aset digital secara real-time?
+**Komponen yang hilang:** Dalam artikel tersebut, yang hilang adalah Metrik Kuantitatif yang Spesifik dan Dataset Primer.
