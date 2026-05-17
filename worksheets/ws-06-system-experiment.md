@@ -67,25 +67,25 @@ Jika variabel tidak bisa di-map ke komponen apapun → arsitektur perlu didesain
 ```
 SYSTEM-EXPERIMENT MAPPING
 
-Research Question: ____________________
+Research Question: Bagaimana pengaruh penerapan teknologi Internet of Things (IoT) terhadap efisiensi manajemen aset digital secara real-time , serta bagaimana kemampuan sistem pemantauan ini dalam merespons ancaman siber?
 
 Variable → Component Mapping:
 | Variabel | Tipe | Komponen Sistem | Cara Manipulasi/Pengukuran |
 |----------|------|-----------------|---------------------------|
-|          | IV   |                 |                           |
-|          | DV   |                 |                           |
-|          | CV   |                 |                           |
+| Penerapan Teknologi IoT | IV | Modul Sensor Jaringan dan Pelacak Otomatis (seperti RFID, Inframerah, atau GPS).| Diubah melalui file config untuk mengaktifkan sensor (real-time) atau menonaktifkannya (pengelolaan manual/tradisional). |
+| Waktu Respons & Frekuensi Ancaman | DV   | Modul Pengukur Keamanan (Dashboard Metrics Logger). | Diukur secara otomatis oleh sistem untuk mencatat durasi deteksi masalah (detik) dan grafik jumlah ancaman siber yang berhasil dikurangi. |
+| Keamanan Data & Jenis Aset | CV   | Repositori Data Sentral dan Standar Enkripsi/Firewall Pokok. | Dikunci (dibuat tetap sama) sepanjang pengujian, baik pada jenis berkas aset yang dipantau maupun parameter keamanan dasarnya. |
 
 4 Prinsip Desain:
-  [ ] Traceability — Setiap komponen bisa ditelusuri ke variabel
-  [ ] Variable Isolation — IV bisa diubah tanpa mengubah CV
-  [ ] Measurement Integration — Pengukuran DV built-in
-  [ ] Reproducibility — Setup bisa direkonstruksi
+  [x] Traceability — Setiap komponen bisa ditelusuri ke variabel
+  [x] Variable Isolation — IV bisa diubah tanpa mengubah CV
+  [x] Measurement Integration — Pengukuran DV built-in
+  [x] Reproducibility — Setup bisa direkonstruksi
 
 Experimental Setup:
-  Input data     : ____________________
-  Parameter      : ____________________
-  Output format  : ____________________
+  Input data     : Data telemetri status aset fisik/digital dan injeksi sampel serangan siber (Malware/Ransomware)
+  Parameter      : Jumlah perangkat terhubung (skala tren 2015-2025) dan interval pembaruan data real-time [cite: 338, 341]
+  Output format  : Grafik simulasi peningkatan keamanan (tren waktu respons vs tingkat keandalan data) [cite: 363, 365]
 ```
 
 ---
@@ -94,16 +94,16 @@ Experimental Setup:
 
 Gunakan RQ dan variabel dari WS-05. Petakan ke komponen sistem.
 
-**RQ:** __________________________________________________
+**RQ:** Bagaimana pengaruh integrasi sensor IoT real-time dalam mendeteksi ancaman keamanan dan mengoptimalkan efisiensi manajemen aset digital?
 
 | Variabel | Tipe | Komponen Sistem | Cara Manipulasi / Pengukuran |
 |----------|------|-----------------|---------------------------|
-| *Contoh: Jenis model* | *IV* | *Modul classifier (swap RF ↔ CNN)* | *Ganti config `model_type`* |
-| | DV | | |
-| | CV | | |
+| Mode Pemantauan IoT | IV | Modul Konektivitas Jaringan (Sensor Otomatis vs Pencatatan Manual) | Mengubah baris pengaturan pada file konfigurasi, misalnya dari mode: "realtime" menjadi mode: "manual" |
+| Efisiensi Pengelolaan Data | DV | Modul Pengukur Performa (Dashboard Metrics Logger) | Dihitung otomatis oleh sistem berdasarkan kecepatan waktu respons penanganan data (detik) dan tingkat keandalan data yang masuk. |
+| Kapasitas Dasar Aset Digital | CV | Pusat Penyimpanan Data (Database Sentral) | Dikunci atau dibuat tetap sama sepanjang pengujian agar tidak memengaruhi hasil pengukuran (misalnya jumlah file atau jenis akun media sosial yang dipantau tidak diubah-ubah). |
 
-**Apakah semua variabel bisa di-map?** [ ] Ya / [ ] Tidak
-> Jika tidak, komponen apa yang perlu ditambahkan? _________
+**Apakah semua variabel bisa di-map?** [x] Ya / [ ] Tidak
+> Jika tidak, komponen apa yang perlu ditambahkan? Semua variabel di atas sudah bisa dipetakan langsung ke dalam komponen sistem karena arsitektur penelitian ini memisahkan antara bagian sensor penangkap data, bagian simulasi gangguan keamanan, dan bagian pelacak metrik keberhasilan.
 
 ---
 
@@ -113,14 +113,14 @@ Evaluasi desain sistem terhadap 4 prinsip.
 
 | Prinsip | Status | Bukti / Penjelasan |
 |---------|--------|-------------------|
-| Traceability | *Contoh: ✅ — setiap modul punya label variabel* | |
-| Modularity | | |
-| Controllability | | |
-| Measurability | | |
+| Traceability | Lengkap | Setiap modul sensor (seperti GPS/RFID) langsung melayani pemenuhan data variabel pelacakan lokasi dan status aset secara transparan. |
+| Modularity | Terpenuhi | Modul injeksi ancaman (malware/ransomware) dipisahkan sepenuhnya dari inti data manajemen aset, sehingga jenis serangan bisa ditukar tanpa merusak database utama. |
+| Controllability | Terpenuhi | Parameter eksternal seperti jumlah basis data terpasang atau ambang batas suhu/tekanan berbahaya diatur via config file, bukan di-hardcode di dalam fungsi sensor. |
+| Measurability | Terpenuhi | Sistem memiliki modul logger bawaan untuk menangkap waktu respons penanganan data, keandalan informasi, dan grafik penurunan frekuensi ancaman secara berkala. |
 
-**Prinsip mana yang paling sulit dipenuhi?** _______________
+**Prinsip mana yang paling sulit dipenuhi?** Modularity & Controllability dalam isolasi data siber.
 **Strategi untuk mengatasinya:**
-> ___________________________________________________
+> Membuat lapisan virtual environment atau sandbox simulation untuk menguji serangan siber (malware/ransomware) agar perilaku serangan dapat dikontrol lewat berkas konfigurasi tanpa mengekspos atau merusak sistem fasilitas operasional riil.
 
 ---
 
@@ -130,14 +130,14 @@ Jika sistem memiliki 3 komponen utama, rencanakan ablation study.
 
 | Kondisi | Komponen A | Komponen B | Komponen C | Hasil yang Diharapkan |
 |---------|-----------|-----------|-----------|----------------------|
-| Full | *Contoh: ✅ CNN* | *Contoh: ✅ Temporal features* | *Contoh: ✅ Z-score norm* | *Baseline penuh* |
-| – A | ❌ (ganti RF) | ✅ | ✅ | |
-| – B | ✅ | ❌ (tanpa temporal) | ✅ | |
-| – C | ✅ | ✅ | ❌ (tanpa normalisasi) | |
+| Full | ✅ Aktif | ✅ Aktif | ✅ Aktif | Baseline Penuh: Pengelolaan aset optimal, keputusan cepat, waktu respons siber sangat rendah, data aman. |
+| – A | ❌ Nonaktif (Manual) | ✅ Aktif | ✅ Aktif | Efisiensi turun drastis; alarm dan proteksi aktif tetapi data kondisi aset terlambat diperbarui (tidak real-time). |
+| – B | ✅ Aktif | ❌ Nonaktif (Tanpa notifikasi) | ✅ Aktif | Data terpantau dan aman, namun manajemen tidak mendapat peringatan instan saat terjadi anomali siber/fisik. |
+| – C | ✅ Akrif | ✅ Aktif | ❌ Nonaktif (Tanpa enkripsi) | Pemantauan sangat cepat, tetapi sistem rentan mengalami kebocoran informasi akibat infeksi malware atau penguncian data. |
 
-**Komponen mana yang diprediksi paling berkontribusi?** _____
+**Komponen mana yang diprediksi paling berkontribusi?** Komponen C (Security Control Module).
 **Mengapa?**
-> ___________________________________________________
+> Karena berdasarkan temuan riset, tantangan terbesar dari ekosistem IoT adalah masalah keamanan data dan integritas informasi. Tanpa komponen keamanan yang kuat, sistem pemantauan real-time yang efisien sekalipun akan lumpuh total jika terkena serangan malware atau ransomware yang memanipulasi fungsi perangkat dan mencuri data sensitif.
 
 ---
 
@@ -146,5 +146,5 @@ Jika sistem memiliki 3 komponen utama, rencanakan ablation study.
 > Apa risiko jika sistem dibangun seperti produk (monolitik, fitur lengkap) lalu baru dilakukan eksperimen? Mengapa arsitektur modular penting untuk riset?
 
 **Jawaban:**
-> ___________________________________________________
-> ___________________________________________________
+> Jika sistem dibangun langsung seperti produk komersial yang monolitik (semua fitur digabung jadi satu tanpa pemisahan variabel), peneliti akan menghadapi kesulitan besar dalam mengisolasi variabel. Ketika terjadi peningkatan efisiensi atau penurunan waktu respons, peneliti tidak akan bisa membuktikan secara ilmiah komponen spesifik mana yang sebenarnya membawa dampak positif tersebut—apakah karena kinerja sensornya, sistem alarmnya, atau protokol keamanannya. Fitur-fitur tambahan yang tidak relevan dengan pertanyaan penelitian justru akan menciptakan noise yang mengaburkan validitas data.
+> Arsitektur modular sangat penting dalam riset karena memungkinkan adanya prinsip Variable Isolation dan pelaksanaan Ablation Study. Kita bisa mematikan atau menukar satu modul tertentu (misalnya mematikan enkripsi atau mengubah sensor dari otomatis ke manual) dengan mudah lewat file konfigurasi untuk melihat efeknya secara murni terhadap keamanan dan efisiensi sistem, tanpa harus merombak seluruh kode program dari awal. Hal ini menjamin bahwa data yang dihasilkan benar-benar akurat, objektif, serta dapat direproduksi ulang oleh peneliti lain (reproducible).
