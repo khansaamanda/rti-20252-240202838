@@ -63,32 +63,32 @@ Capai **repeatability** dulu, baru **reproducibility**.
 EXPERIMENT SETUP DOCUMENTATION
 
 Hardware:
-  CPU     : ____________________
-  RAM     : ____________________
-  GPU     : ____________________
-  Storage : ____________________
+  CPU     : Intel Core i5-1135G7 @ 2.40GHz (4 Cores, 8 Threads)
+  RAM     : 16 GB DDR4 3200MHz
+  GPU     : Intel Iris Xe Graphics (CPU-only untuk analisis data teks)
+  Storage : 512 GB NVMe PCIe SSD
 
 Software:
-  OS        : ____________________
-  Runtime   : ____________________
-  Framework : ____________________
+  OS        : Windows 11 Home 64-bit
+  Runtime   : Python 3.10.11
+  Framework : Jupyter Notebook / Anaconda Environment
 
 Dependencies:
 | Library | Version | Sumber | Hash/Checksum |
 |---------|---------|--------|---------------|
-|         |         |        |               |
-|         |         |        |               |
+|pandas|2.0.3|PyPI|sha256:e6a92b|
+|numpy|1.24.3|PyPI|sha256:b891cf|
 
 Konfigurasi:
-  Config file     : ____________________
-  Random seed     : ____________________
-  Hyperparameters : ____________________
+  Config file     : config.json
+  Random seed     : 42
+  Hyperparameters : data_interval: "realtime", baseline: "traditional_manual", threshold_seconds: 5
 
 Reproducibility Check:
-  [ ] Dependency terdokumentasi (requirements.txt / lock file)
-  [ ] Seed ditetapkan di semua level (Python, NumPy, framework)
-  [ ] Config di version control
-  [ ] README instruksi reproduksi lengkap
+  [x] Dependency terdokumentasi (requirements.txt / lock file)
+  [x] Seed ditetapkan di semua level (Python, NumPy, framework)
+  [x] Config di version control
+  [x] README instruksi reproduksi lengkap
 ```
 
 ---
@@ -99,23 +99,23 @@ Dokumentasikan environment untuk eksperimen Anda (boleh environment saat ini ata
 
 | Komponen | Spesifikasi |
 |----------|------------|
-| CPU | *Contoh: Intel Core i7-12700H, 14 Core* |
-| RAM | *Contoh: 32 GB DDR5* |
-| GPU | *Contoh: NVIDIA RTX 3060 6GB / CPU-only jika tidak ada GPU* |
-| OS | *Contoh: Ubuntu 22.04 LTS / Windows 11* |
-| Runtime | |
-| Framework | |
-| Random Seed | |
+| CPU | Intel Core i5-1135G7 @ 2.40GHz (4 Cores, 8 Threads) |
+| RAM | 16 GB DDR4 |
+| GPU | Intel Iris Xe Graphics (CPU-only untuk analisis data) |
+| OS | Windows 11 Home 64-bit |
+| Runtime | Python 3.10.11 |
+| Framework | Jupyter Notebook / Anaconda Environment |
+| Random Seed | 42 |
 
 **Dependencies (minimal 5):**
 
 | Library | Version | Alasan Dibutuhkan |
 |---------|---------|-------------------|
-| *Contoh: scikit-learn* | *1.3.2* | *Klasifikasi + evaluasi metrik* |
-| | | |
-| | | |
-| | | |
-| | | |
+| pandas | 2.0.3 | Digunakan untuk membaca, membersihkan, dan mengolah data simulasi dalam bentuk tabel. |
+| numpy | 1.24.3 | Menyediakan fungsi matematika dan mengunci kestabilan urutan angka acak (random seed). |
+| matplotlib | 3.7.2 | Digunakan untuk membuat visualisasi utama seperti grafik tren atau diagram batang hasil riset. |
+| seaborn | 0.12.2 | Membantu mempercantik tampilan grafik analisis agar lebih mudah dibaca dan dipahami. |
+| scikit-learn | 1.3.0 | Digunakan untuk kebutuhan pemodelan statistik atau evaluasi metrik tren data sederhana. |
 
 ---
 
@@ -125,18 +125,21 @@ Rancang tes repeatability sederhana: jalankan kode yang sama 3× di environment 
 
 | Run | Seed | Metrik Utama | Hasil Sama? |
 |-----|------|-------------|-------------|
-| 1 | *Contoh: 42* | *Contoh: Accuracy* | — |
-| 2 | | | [ ] Ya / [ ] Tidak |
-| 3 | | | [ ] Ya / [ ] Tidak |
+| 1 | 42 | Waktu Respons Deteksi (detik) | — |
+| 2 | 42 | Waktu Respons Deteksi (detik) | [x] Ya / [ ] Tidak |
+| 3 | 42 | Waktu Respons Deteksi (detik) | [x] Ya / [ ] Tidak |
 
 **Jika hasil berbeda, kemungkinan penyebab:**
-> ___________________________________________________
+> 1. Random state tidak dikunci di semua pustaka: Pengaturan seed hanya dilakukan pada program Python bawaan, tetapi lupa dikunci pada pustaka numpy atau scikit-learn yang bertugas mengacak data simulasi.
+2. Variabel sisa di memori (Cache): Jupyter Notebook tidak dibersihkan atau di-restart sebelum menjalankan ulang, sehingga data dari proses (run) pertama masih tersimpan dan memengaruhi perhitungan berikutnya.
+3. Gangguan proses latar belakang (Background process): Komputer tiba-tiba menjalankan pembaruan sistem (OS update) otomatis atau pemindaian antivirus di tengah-tengah pengujian yang memengaruhi kecepatan pemrosesan simulasi.
+
 
 **Checklist kontrol yang sudah diterapkan:**
-- [ ] Random seed di-set di semua level
-- [ ] Tidak ada background process yang mengganggu
-- [ ] Cache dibersihkan antar-run
-- [ ] Config file yang sama untuk semua run
+- [x] Random seed di-set di semua level
+- [x] Tidak ada background process yang mengganggu
+- [x] Cache dibersihkan antar-run
+- [x] Config file yang sama untuk semua run
 
 ---
 
@@ -145,25 +148,37 @@ Rancang tes repeatability sederhana: jalankan kode yang sama 3× di environment 
 Tulis README minimum untuk eksperimen Anda (6 komponen wajib).
 
 ```
-# Judul Eksperimen: ____________________
+# Judul Eksperimen: Simulasi Pengaruh IoT Terhadap Waktu Respons Keamanan Aset Digital
 
 ## 1. Environment
-> (Salin spesifikasi dari Latihan 1)
+> - CPU: Intel Core i5-1135G7 @ 2.40GHz (4 Cores, 8 Threads)
+- RAM: 16 GB DDR4
+- GPU: Intel Iris Xe Graphics (CPU-only)
+- OS: Windows 11 Home 64-bit
+- Runtime: Python 3.10.11
+- Framework: Jupyter Notebook / Anaconda Environment
+- Pustaka Utama: pandas (2.0.3), numpy (1.24.3), matplotlib (3.7.2), seaborn (0.12.2), scikit-learn (1.3.0)
 
 ## 2. Installation
-> (Langkah instalasi, misal: "pip install -r requirements.txt")
+> Silakan pasang seluruh pustaka yang diperlukan dengan menjalankan perintah berikut di terminal:
+```bash
+pip install pandas==2.0.3 numpy==1.24.3 matplotlib==3.7.2 seaborn==0.12.2 scikit-learn==1.3.0
 
 ## 3. Data
-> (Deskripsi data: sumber, format, ukuran)
+> Eksperimen ini menggunakan data sekunder berupa file log simulasi bernama iot_asset_logs.csv. Data tersebut mencakup catatan waktu respon deteksi ancaman sebelum dan setelah integrasi sensor pintar IoT dengan ukuran file sekitar 150 KB (format teks terpisah koma).
 
 ## 4. Execution
-> (Command untuk menjalankan eksperimen)
+> Untuk menjalankan simulasi dan menghasilkan grafik analisis, eksekusi perintah berikut pada terminal: python run_simulation.py
 
 ## 5. Configuration
-> (File config yang digunakan + parameter kunci)
+> Semua pengaturan eksperimen disimpan dalam file config.json. Beberapa parameter kunci yang digunakan meliputi:
+1. random_seed: 42 (untuk mengunci konsistensi urutan data acak)
+2. data_interval: "realtime"
+3. baseline_system: "traditional_manual"
 
 ## 6. Expected Output
-> (Contoh output yang diharapkan + format)
+> File gambar grafik_respons_keamanan.png yang menampilkan grafik garis penurunan waktu respon penanganan ancaman (dalam satuan detik).
+Pesan teks ringkasan di terminal yang menampilkan rata-rata tingkat efisiensi pemantauan aset dalam persen (%).
 ```
 
 ---
@@ -172,6 +187,7 @@ Tulis README minimum untuk eksperimen Anda (6 komponen wajib).
 
 > Apakah eksperimen Anda saat ini bisa direproduksi oleh orang lain tanpa bantuan Anda? Komponen apa yang masih hilang?
 
-**Level saat ini:** [ ] Repeatability / [ ] Reproducibility / [ ] Belum keduanya
+**Level saat ini:** [x] Repeatability / [ ] Reproducibility / [ ] Belum keduanya
 **Komponen yang belum terdokumentasi:**
-> ___________________________________________________
+> 1. Dokumen isolasi lingkungan otomatis seperti **Docker** atau file snapshot lingkungan **Conda** (`environment.yml`) belum dibuat. Hal ini berisiko menimbulkan error jika dijalankan pada sistem operasi yang berbeda (seperti Linux atau macOS).
+2. File parameter konfigurasi luar (`config.json`) belum sepenuhnya terpisah, karena sebagian kecil parameter masih ditulis manual langsung di dalam baris kode utama (*hardcoded*).
