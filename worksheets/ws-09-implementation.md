@@ -101,7 +101,7 @@ Dokumentasikan environment untuk eksperimen Anda (boleh environment saat ini ata
 |----------|------------|
 | CPU | Intel Core i5-1135G7 @ 2.40GHz (4 Cores, 8 Threads) |
 | RAM | 16 GB DDR4 |
-| GPU | Intel Iris Xe Graphics (CPU-only untuk analisis data) |
+| GPU | Intel Iris Xe Graphics (CPU-only) |
 | OS | Windows 11 Home 64-bit |
 | Runtime | Python 3.10.11 |
 | Framework | Jupyter Notebook / Anaconda Environment |
@@ -111,11 +111,11 @@ Dokumentasikan environment untuk eksperimen Anda (boleh environment saat ini ata
 
 | Library | Version | Alasan Dibutuhkan |
 |---------|---------|-------------------|
-| pandas | 2.0.3 | Digunakan untuk membaca, membersihkan, dan mengolah data simulasi dalam bentuk tabel. |
-| numpy | 1.24.3 | Menyediakan fungsi matematika dan mengunci kestabilan urutan angka acak (random seed). |
-| matplotlib | 3.7.2 | Digunakan untuk membuat visualisasi utama seperti grafik tren atau diagram batang hasil riset. |
-| seaborn | 0.12.2 | Membantu mempercantik tampilan grafik analisis agar lebih mudah dibaca dan dipahami. |
-| scikit-learn | 1.3.0 | Digunakan untuk kebutuhan pemodelan statistik atau evaluasi metrik tren data sederhana. |
+| pandas | 2.0.3 | Digunakan untuk membaca, membersihkan, dan mengolah data simulasi dalam bentuk tabel.Membaca file CSV hasil kuesioner (Google Form), membersihkan data kosong, dan mengubah format jawaban ke angka (Skala Likert). |
+| numpy | 1.24.3 | Menghitung statistik dasar seperti nilai rata-rata (mean) dan standar deviasi dari jawaban responden. |
+| matplotlib | 3.7.2 | Membuat grafik batang (bar chart) untuk memvisualisasikan persentase jawaban kuesioner. |
+| seaborn | 0.12.2 | Membantu menampilkan diagram distribusi jawaban responden agar lebih menarik dan mudah dibaca di dalam laporan. |
+| scikit-learn | 1.11.1 | Digunakan untuk melakukan uji statistik sederhana (seperti menghitung nilai p-value untuk melihat seberapa valid hubungan data tersebut). |
 
 ---
 
@@ -125,14 +125,14 @@ Rancang tes repeatability sederhana: jalankan kode yang sama 3× di environment 
 
 | Run | Seed | Metrik Utama | Hasil Sama? |
 |-----|------|-------------|-------------|
-| 1 | 42 | Waktu Respons Deteksi (detik) | — |
-| 2 | 42 | Waktu Respons Deteksi (detik) | [x] Ya / [ ] Tidak |
-| 3 | 42 | Waktu Respons Deteksi (detik) | [x] Ya / [ ] Tidak |
+| 1 | 42 | Nilai Rata-Rata Kepuasan & Nilai P-Value Uji Statistik | — |
+| 2 | 42 | Nilai Rata-Rata Kepuasan & Nilai P-Value Uji Statistik | [x] Ya / [ ] Tidak |
+| 3 | 42 | Nilai Rata-Rata Kepuasan & Nilai P-Value Uji Statistik | [x] Ya / [ ] Tidak |
 
 **Jika hasil berbeda, kemungkinan penyebab:**
-> 1. Random state tidak dikunci di semua pustaka: Pengaturan seed hanya dilakukan pada program Python bawaan, tetapi lupa dikunci pada pustaka numpy atau scikit-learn yang bertugas mengacak data simulasi.
-2. Variabel sisa di memori (Cache): Jupyter Notebook tidak dibersihkan atau di-restart sebelum menjalankan ulang, sehingga data dari proses (run) pertama masih tersimpan dan memengaruhi perhitungan berikutnya.
-3. Gangguan proses latar belakang (Background process): Komputer tiba-tiba menjalankan pembaruan sistem (OS update) otomatis atau pemindaian antivirus di tengah-tengah pengujian yang memengaruhi kecepatan pemrosesan simulasi.
+> 1. Random state tidak dikunci di semua pustaka: Pengaturan seed hanya dilakukan pada program Python bawaan, tetapi lupa dikunci pada pustaka seperti scikit-learn (jika ada proses pembagian data acak dari hasil kuesioner).
+2. Variabel sisa di memori (Cache): Jupyter Notebook tidak dibersihkan atau di-restart sebelum menjalankan ulang, sehingga data perhitungan statistik dari proses (run) pertama masih tersimpan dan memengaruhi perhitungan berikutnya.
+3. Perubahan pada file data sumber: Terdapat penambahan baris data baru ke dalam file respons_kuesioner_iot.csv (misalnya ada responden yang baru mengumpulkan form) tepat saat skrip sedang dijalankan ulang, sehingga memengaruhi nilai rata-rata akhir.
 
 
 **Checklist kontrol yang sudah diterapkan:**
@@ -165,20 +165,27 @@ Tulis README minimum untuk eksperimen Anda (6 komponen wajib).
 pip install pandas==2.0.3 numpy==1.24.3 matplotlib==3.7.2 seaborn==0.12.2 scikit-learn==1.3.0
 
 ## 3. Data
-> Eksperimen ini menggunakan data sekunder berupa file log simulasi bernama iot_asset_logs.csv. Data tersebut mencakup catatan waktu respon deteksi ancaman sebelum dan setelah integrasi sensor pintar IoT dengan ukuran file sekitar 150 KB (format teks terpisah koma).
+> Eksperimen ini menggunakan data primer riil dari hasil penyebaran kuesioner bernama respons_kuesioner_iot.csv.
+1. Sumber Data: Hasil survei kepada 50 responden (staf IT dan manajer pengelola aset digital).
+2. Format: File teks terpisah koma (.csv) dengan ukuran sekitar 25 KB.
+3. Isi Data: Nilai skala Likert (1-5) mengenai persepsi kemudahan, kecepatan respon pelacakan aset, dan tingkat keamanan setelah menggunakan sistem berbasis IoT.
 
 ## 4. Execution
-> Untuk menjalankan simulasi dan menghasilkan grafik analisis, eksekusi perintah berikut pada terminal: python run_simulation.py
+> Untuk memproses data kuesioner, melakukan uji statistik, dan menampilkan grafik distribusi jawaban, jalankan perintah berikut:
+Bash
+python analyze_survey.py
+
+Bash
 
 ## 5. Configuration
-> Semua pengaturan eksperimen disimpan dalam file config.json. Beberapa parameter kunci yang digunakan meliputi:
-1. random_seed: 42 (untuk mengunci konsistensi urutan data acak)
-2. data_interval: "realtime"
-3. baseline_system: "traditional_manual"
+> Semua pengaturan analisis disimpan dalam file config.json. Beberapa parameter kunci yang digunakan meliputi:
+1. random_seed: 42 (untuk mengunci konsistensi saat pembagian data uji jika diperlukan)
+2. alpha_level: 0.05 (batas signifikansi uji statistik)
+3. target_variable: "efisiensi_manajemen_aset"
 
 ## 6. Expected Output
-> File gambar grafik_respons_keamanan.png yang menampilkan grafik garis penurunan waktu respon penanganan ancaman (dalam satuan detik).
-Pesan teks ringkasan di terminal yang menampilkan rata-rata tingkat efisiensi pemantauan aset dalam persen (%).
+>File gambar grafik_distribusi_persepsi.png yang menampilkan diagram batang persentase persetujuan responden terhadap efisiensi IoT.
+Output teks di terminal yang menunjukkan nilai validitas, reliabilitas kuesioner, serta hasil uji hipotesis (nilai p-value).
 ```
 
 ---
@@ -189,5 +196,5 @@ Pesan teks ringkasan di terminal yang menampilkan rata-rata tingkat efisiensi pe
 
 **Level saat ini:** [x] Repeatability / [ ] Reproducibility / [ ] Belum keduanya
 **Komponen yang belum terdokumentasi:**
-> 1. Dokumen isolasi lingkungan otomatis seperti **Docker** atau file snapshot lingkungan **Conda** (`environment.yml`) belum dibuat. Hal ini berisiko menimbulkan error jika dijalankan pada sistem operasi yang berbeda (seperti Linux atau macOS).
-2. File parameter konfigurasi luar (`config.json`) belum sepenuhnya terpisah, karena sebagian kecil parameter masih ditulis manual langsung di dalam baris kode utama (*hardcoded*).
+> 1. Dokumen isolasi lingkungan otomatis seperti **Docker** atau file pengaturan **Conda** (`environment.yml`) belum dibuat. Hal ini penting agar orang lain yang menggunakan sistem operasi berbeda tidak mengalami kendala versi pustaka saat membaca data kuesioner.
+2. Kode pembersihan data (*data cleaning*) untuk menyaring jawaban kuesioner yang tidak lengkap/kosong masih menyatu di dalam skrip utama, belum dipisahkan menjadi modul tersendiri.
