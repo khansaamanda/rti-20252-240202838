@@ -70,22 +70,22 @@ EXECUTION PLAN
 
 | Run # | Skenario | Seed | Parameter | Status | Waktu | Output File |
 |-------|----------|------|-----------|--------|-------|-------------|
-| 1     |          |      |           |        |       |             |
-| 2     |          |      |           |        |       |             |
-| 3     |          |      |           |        |       |             |
-| ...   |          |      |           |        |       |             |
+| 1     |Bootstrapping Data Kuesioner|42|sample=30, alpha=0.05|Planned|10:00|log_run_1.json|
+| 2     |Bootstrapping Data Kuesioner|123|sample=30, alpha=0.05|Planned|10:05|log_run_2.json|
+| 3     |Bootstrapping Data Kuesioner|2026|sample=30, alpha=0.05|Planned|10:10|log_run_3.json|
+| 4  |Bootstrapping Data Kuesioner|777|sample=30, alpha=0.05|Planned|10:15|log_run_4.json|
 
-Jumlah runs per skenario : ____
-Total runs               : ____
+Jumlah runs per skenario : 5
+Total runs               : 5
 
 DATA LOG (per run):
-  Run ID    : ____________________
-  Timestamp : ____________________
-  Skenario  : ____________________
-  Input     : ____________________
-  Output    : ____________________
-  Anomali   : ____________________
-  Catatan   : ____________________
+  Run ID    : run-survey-001
+  Timestamp : 2026-06-23T10:00:00
+  Skenario  : Bootstrapping Data Kuesioner Mahasiswa (Run 1)
+  Input     : respons_kuesioner_iot_mahasiswa.csv
+  Output    : p_value=0.024, cronbach_alpha=0.82, r_square=0.45
+  Anomali   : Tidak ada anomali, semua baris data terbaca penuh.
+  Catatan   : Hasil pada run awal menunjukkan pengaruh yang signifikan dan reliabilitas tinggi.
 ```
 
 ---
@@ -96,15 +96,15 @@ Susun execution plan untuk eksperimen Anda. Tentukan skenario, jumlah run, dan s
 
 | Run # | Skenario | Seed | Parameter Kunci | Status |
 |-------|----------|------|----------------|--------|
-| *1* | *Contoh: BERT-base, DS-1* | *42* | *lr=2e-5, epoch=10* | *Planned* |
-| *2* | *BERT-base, DS-1* | *123* | *lr=2e-5, epoch=10* | *Planned* |
-| 3 | | | | |
-| 4 | | | | |
-| 5 | | | | |
+| 1 | Bootstrapping Data Kuesioner | 42 | sample_size=30, alpha=0.05 | Completed |
+| 2 | Bootstrapping Data Kuesioner | 123 | sample_size=30, alpha=0.05 | Completed |
+| 3 | Bootstrapping Data Kuesioner  | 2026 | sample_size=30, alpha=0.05 | Completed |
+| 4 | Bootstrapping Data Kuesioner | 777 | sample_size=30, alpha=0.05 | Completed |
+| 5 | Bootstrapping Data Kuesioner | 999 | sample_size=30, alpha=0.05 | Completed |
 
-**Total skenario:** ____
-**Run per skenario:** ____
-**Total run keseluruhan:** ____
+**Total skenario:** 1 (Analisis Konsistensi Statistik Kuesioner)
+**Run per skenario:** 5
+**Total run keseluruhan:** 5
 
 ---
 
@@ -115,25 +115,25 @@ Desain format data log untuk eksperimen Anda. Tentukan field apa saja yang akan 
 **Identitas:**
 | Field | Contoh |
 |-------|--------|
-| Run ID | *run-001* |
-| Timestamp | *2025-03-15T10:30:00* |
-| | |
+| Run ID | run-survey-001 |
+| Timestamp | 2026-06-23T10:00:00 |
+| Script Name | analyze_survey.py |
 
 **Konfigurasi:**
 | Field | Contoh |
 |-------|--------|
-| Seed | *42* |
-| Code version | *commit abc1234* |
-| | |
+| Seed | 42 |
+| Code version | commit 5a2b13f |
+| Sample Size | 30 |
 
 **Hasil:**
 | Metrik | Tipe Data | Range Valid |
 |--------|----------|-------------|
-| *Contoh: Accuracy* | *float* | *0.0 – 1.0* |
-| | | |
-| | | |
+| Cronbach's Alpha (Reliabilitas) | float | 0.0 – 1.0 |
+| Nilai P-Value (Signifikansi) | float | 0.0 – 1.0 |
+| Nilai R-Square (Besar Pengaruh) | float | 0.0 – 1.0 |
 
-**Format output:** [ ] CSV / [ ] JSON / [ ] Database / [ ] Lainnya: ____
+**Format output:** [ ] CSV / [x] JSON / [ ] Database / [ ] Lainnya: ____
 
 ---
 
@@ -143,10 +143,10 @@ Rencanakan bagaimana menangani anomali. Untuk setiap jenis, tentukan langkah yan
 
 | Jenis Anomali | Contoh | Tindakan |
 |---------------|--------|----------|
-| Run gagal (crash) | *Contoh: OOM pada batch_size=64* | *Contoh: Dokumentasi, re-run batch_size=32, catat perubahan* |
-| Hasil ekstrem | | |
-| Waktu eksekusi anomali | | |
-| Inkonsistensi dengan run lain | | |
+| Run gagal (crash) | File CSV tidak terbaca karena pemisah kolom (delimiter) salah atau ada karakter aneh. | Dokumentasikan pesan error, bersihkan karakter yang rusak (data cleaning) pada file CSV, lalu jalankan ulang skrip. |
+| Hasil ekstrem | Nilai reliabilitas (Cronbach's Alpha) sangat rendah, misalnya jatuh di bawah 0.5. | Identifikasi pertanyaan yang membingungkan responden melalui matriks korelasi, catat sebagai temuan keterbatasan kuesioner, dan jangan hapus data asli. |
+| Waktu eksekusi anomali | Proses pengambilan sampel ulang (resampling) macet/freeze karena perulangan tanpa batas di Python. | Hentikan paksa proses (Ctrl+C), perbaiki batasan iterasi pada kode fungsi, lalu jalankan ulang (re-run). |
+| Inkonsistensi dengan run lain | Nilai p-value berubah drastis antar seed (misal run 1 lolos uji, run 2 gagal). | Periksa apakah ada jawaban responden yang sangat menyimpang (outlier), hitung rata-rata hasil dari semua run, dan catat variasi ini sebagai efek dari ukuran sampel. |
 
 **Prinsip:** Detect → Investigate → Document → Decide
 
@@ -157,6 +157,6 @@ Rencanakan bagaimana menangani anomali. Untuk setiap jenis, tentukan langkah yan
 > Pernahkah Anda melaporkan hasil riset/tugas dari single run? Apa risikonya? Bagaimana multiple run mengubah kepercayaan terhadap hasil?
 
 **Pengalaman sebelumnya:**
-> ___________________________________________________
+> Ya, dalam tugas sebelumnya saya sering hanya menjalankan kode satu kali saja (single run) dan langsung menyalin angkanya ke dalam laporan. Risikonya, angka tersebut bisa jadi hanya sebuah kebetulan karena urutan datanya sedang pas. Jika data tersebut diacak ulang atau dijalankan di komputer yang berbeda, hasilnya bisa berubah dan membuat kesimpulan riset menjadi rapuh atau tidak valid.
 **Yang akan dilakukan berbeda:**
-> ___________________________________________________
+> Pada riset ini, saya menerapkan eksekusi berulang (multiple run) menggunakan teknik pengacakan teratur yang dikunci (seed). Dengan cara ini, hasil pengolahan data kuesioner tidak hanya bergantung pada tebakan satu angka mutlak, melainkan memiliki bukti konsistensi nilai rata-rata (mean) dan rentang yang stabil. Hal ini membuat analisis data saya menjadi jauh lebih jujur, ilmiah, dan dapat dipertanggungjawabkan saat sidang atau evaluasi.
