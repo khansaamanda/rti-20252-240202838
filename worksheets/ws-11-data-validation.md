@@ -69,27 +69,27 @@ Completeness:
   [ ] Semua skenario tercakup
   [ ] Jumlah run sesuai rencana
   [ ] Tidak ada file output hilang
-  Missing: ____ dari ____ data points
+  Missing: 3 dari 40 data points
 
 Format Consistency:
-  [ ] Semua file format sama (CSV/JSON/...)
-  [ ] Header konsisten
-  [ ] Tipe data konsisten (numerik tetap numerik)
+  [x] Semua file format sama (CSV/JSON/...)
+  [x] Header konsisten
+  [x] Tipe data konsisten (numerik tetap numerik)
 
 Range & Logic:
   [ ] Nilai dalam range masuk akal
-  [ ] Tidak ada waktu negatif
-  [ ] Metrik 0–100%, tidak di luar range
-  Anomali ditemukan: ____________________
+  [x] Tidak ada waktu negatif
+  [x] Metrik 0–100%, tidak di luar range
+  Anomali ditemukan: Run 4 drop ke 78.3% akibat mesin kepanasan (thermal throttling).
 
 Cross-Validation:
-  [ ] Run identik → hasil mendekati
-  [ ] Trend konsisten dengan ekspektasi teori
+  [x] Run identik → hasil mendekati
+  [x] Trend konsisten dengan ekspektasi teori
 
 Keputusan:
   [ ] Data siap analisis
   [ ] Perlu cleaning
-  [ ] Perlu re-run (skenario: ____)
+  [x] Perlu re-run (skenario: LSTM, DS-3 [run 7 & 9], Transformer, DS-4 [run 10], dan sampel Run 4)
 ```
 
 ---
@@ -100,15 +100,15 @@ Verifikasi apakah semua data yang direncanakan sudah terkumpul.
 
 | Skenario | Run Direncanakan | Run Tercatat | Missing | Alasan |
 |----------|-----------------|-------------|---------|--------|
-| *Contoh: BERT, DS-1* | *10* | *10* | *0* | *—* |
-| *LSTM, DS-3* | *10* | *8* | *2* | *OOM pada run 7 & 9* |
-| | | | | |
-| | | | | |
+| BERT, DS-1 | 10 | 10 | 0 | — |
+| LSTM, DS-3 | 10 | 8 | 2 | OOM (Out of Memory) pada run 7 & 9 |
+| ResNet, DS-2 | 10 | 10 | 0 | — |
+| Transformer, DS-4 | 10 | 9 | 1 | Koneksi server terputus saat run terakhir |
 
-**Total expected:** ____ | **Total actual:** ____ | **Missing:** ____
+**Total expected:** 40 | **Total actual:** 37 | **Missing:** 3
 
 **Keputusan untuk data missing:**
-> ___________________________________________________
+> saya akan melakukan re-run (menjalankan ulang) pada run yang gagal (LSTM run 7 & 9, serta Transformer run 10) setelah memperbaiki kapasitas memori dan memastikan koneksi server stabil. Jangan diabaikan begitu saja agar hasil analisis akhir tidak bias.
 
 ---
 
@@ -127,16 +127,16 @@ Periksa data Anda untuk anomali. Gunakan metode IQR atau z-score.
 | 5 | *91.0* |
 
 **Deteksi outlier:**
-- Q1 = ____ | Q3 = ____ | IQR = ____
-- Batas bawah (Q1 - 1.5×IQR) = ____
-- Batas atas (Q3 + 1.5×IQR) = ____
-- Outlier terdeteksi: ____
+- Q1 = 90.8 | Q3 = 91.2 | IQR = 0.4
+- Batas bawah (Q1 - 1.5×IQR) = 90.8 - 0.6 = 90.2
+- Batas atas (Q3 + 1.5×IQR) = 91.2 + 0.6 = 91.8
+- Outlier terdeteksi: Run 4 (78.3%)
 
 **Investigasi (untuk setiap outlier):**
 
 | Outlier | Nilai | Kemungkinan Penyebab | Keputusan |
 |---------|-------|---------------------|-----------|
-| *Run 4* | *78.3* | *Contoh: thermal throttling setelah 3 run berturut* | *Re-run dengan cooling interval* |
+| Run 4 | 78.3 | Thermal throttling (prosesor kepanasan dan menurunkan performa otomatis) karena berjalan nonstop tanpa jeda di 3 run sebelumnya. |
 
 ---
 
@@ -144,12 +144,12 @@ Periksa data Anda untuk anomali. Gunakan metode IQR atau z-score.
 
 Buat laporan validasi ringkas untuk dataset eksperimen Anda.
 
-**1. Completeness:** ____% data terkumpul
-**2. Format:** [ ] Konsisten / [ ] Ada inkonsistensi: ____
-**3. Range check (anomali):** ____
-**4. Logic check:** [ ] Parameter sesuai plan / [ ] Ada ketidaksesuaian: ____
+**1. Completeness:** 92.5% data terkumpul (37 dari 40 run).
+**2. Format:** [x] Konsisten / [ ] Ada inkonsistensi
+**3. Range check (anomali):** Terdeteksi 1 data aneh (outlier) pada Run 4 dengan nilai 78.3%.
+**4. Logic check:** [x] Parameter sesuai plan / [ ] Ada ketidaksesuaian
 
-**Kesimpulan:** [ ] Data siap analisis / [ ] Perlu tindakan: ____
+**Kesimpulan:** [ ] Data siap analisis / [x] Perlu tindakan: Jalankan ulang (re-run) 3 data yang hilang karena kendala teknis dan 1 data outlier yang drop akibat mesin kepanasan sebelum lanjut ke tahap analisis statistik.
 
 ---
 
@@ -157,5 +157,7 @@ Buat laporan validasi ringkas untuk dataset eksperimen Anda.
 
 > Apa perbedaan antara "data yang benar" dan "data yang dipercaya"? Mengapa proses validasi formal diperlukan meskipun data dikumpulkan secara otomatis?
 
-> ___________________________________________________
-> ___________________________________________________
+> Data yang benar adalah data asli apa adanya yang terekam oleh sistem komputer. Data ini bisa saja mengandung eror, salah format, atau drop akibat gangguan teknis (seperti nilai 78.3% di atas).
+
+Data yang dipercaya (Trusted Data) adalah data yang sudah melalui proses penyaringan dan validasi formal. Data ini dipastikan lengkap, masuk akal secara logika, dan siap digunakan untuk mengambil keputusan tanpa risiko menyesatkan.
+> Karena sistem otomatis (logger) dibuat oleh manusia yang tidak luput dari bug atau gangguan lingkungan. Otomatis merekam bukan berarti otomatis datanya bersih dan masuk akal. Tanpa validasi formal, kita bisa saja terjebak mengira performa model kita buruk, padahal aslinya komputer kita cuma sedang kepanasan (thermal throttling) saat merekam data tersebut!
